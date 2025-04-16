@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PLMiniChallengesFebruary</string>
+    <string name="thousands_separator">Thousands Separator</string>
 </resources>
