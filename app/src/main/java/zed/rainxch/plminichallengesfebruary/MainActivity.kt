@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +34,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import zed.rainxch.plminichallengesfebruary.domain.ThousandModel
 import zed.rainxch.plminichallengesfebruary.ui.theme.Black
 import zed.rainxch.plminichallengesfebruary.ui.theme.Gray
 import zed.rainxch.plminichallengesfebruary.ui.theme.PLMiniChallengesFebruaryTheme
@@ -60,24 +61,23 @@ class MainActivity : ComponentActivity() {
 fun ThousandContainer(
     modifier: Modifier = Modifier
 ) {
-    val dataSet = listOf<ThousandModel>(
-        ThousandModel("1,000", true),
-        ThousandModel("1.000", true),
-        ThousandModel("1 000", true)
-    )
+    val dataSet = listOf("1,000", "1.000", "1 000")
+
     var activeItem by remember { mutableIntStateOf(0) }
     Column(modifier = modifier.padding(4.dp)) {
         Text(stringResource(R.string.thousands_separator))
-        Row(
+        Row (
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(top = 4.dp)
+                .fillMaxWidth()
                 .background(
                     color = Purple80,
                     shape = RoundedCornerShape(16.dp)
                 )
-                .padding(horizontal = 4.dp),
+                .padding(horizontal = 4.dp)
+                .horizontalScroll(ScrollState(0)),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
+
         ) {
             dataSet.forEachIndexed { index, item ->
                 ThousandSeparator(
@@ -87,7 +87,6 @@ fun ThousandContainer(
                             activeItem = index
                         }
                     },
-                    modifier = Modifier.weight(1 / dataSet.size.toFloat()),
                     isActive = activeItem == index
                 )
             }
@@ -98,12 +97,11 @@ fun ThousandContainer(
 
 @Composable
 fun ThousandSeparator(
-    data: ThousandModel,
+    data: String,
     isActive: Boolean,
-    onClick: (ThousandModel) -> Unit,
     modifier: Modifier = Modifier,
+    onClick: (String) -> Unit
 ) {
-//    var isEnabledState by remember { mutableStateOf(isActive) }
     var colorBackground = if (isActive) White else Purple80
     var colorText = if (isActive) Black else Gray
 
@@ -116,6 +114,6 @@ fun ThousandSeparator(
         onClick = { onClick(data) },
         modifier = modifier
     ) {
-        Text(text = data.value)
+        Text(text = data)
     }
 }
